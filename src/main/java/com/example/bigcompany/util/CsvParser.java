@@ -4,12 +4,14 @@ import java.io.*;
 import java.util.*;
 
 import com.example.bigcompany.model.Employee;
+import com.example.bigcompany.exception.DuplicateEmployeeException;
+import com.example.bigcompany.exception.InvalidDataException;
+import com.example.bigcompany.exception.MultipleCeoException;
 
 public class CsvParser {
 	
     public static Map<Integer, Employee> parseFile(String path) throws IOException {
-        Map<Integer, Employee> employees = convertCsvToEmployees(path);
-        return employees;
+        return convertCsvToEmployees(path);
     }
     
     // converts csv to employee object list 
@@ -24,44 +26,46 @@ public class CsvParser {
 
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                
-                // Validations if the record does not have all the fields
-                if(parts.length < 4) {
-                	System.out.printf("Record doesnt have complete data %s%n",line);
-                	continue;
-                }
-                
-                // initialization
-                int id = Integer.parseInt(parts[0].trim());
-                String firstName = parts[1].trim();
-                String lastName = parts[2].trim();
-                double salary = Double.parseDouble(parts[3].trim());
-                Integer managerId = parts.length > 4 && !parts[4].trim().isEmpty()
-                        ? Integer.parseInt(parts[4].trim()) : null;
-                
-                // Company should have only one CEO
-                if(hasCeo && managerId == null) {
-                	System.out.printf("Record is not valid %s as CEO is already present%n",line);
-                	continue;
-                }
-                if(managerId == null) {
-                	hasCeo = true;
-                }
-                
-                // Duplicate Id Validations
-                if(employees.isEmpty() || employees.get(id) == null) {
+                try {
+                    int id = Integer.parseInt(parts[0].trim());
+                    String firstName = parts[1].trim();
+                    String lastName = parts[2].trim();
+                    double salary = Double.parseDouble(parts[3].trim());
+                    Integer managerId = parts.length > 4 && !parts[4].trim().isEmpty()
+                            ? Integer.parseInt(parts[4].trim()) : null;
+
+                    // Validate data
+                    if (salary < 0 || id < 0 || (firstName + lastName).isEmpty() || (managerId != null && managerId < 0)) {
+                        throw new InvalidDataException("Invalid data in line: " + line);
+                    }
+
+                    if (hasCeo && managerId == null) {
+                        throw new MultipleCeoException("Multiple CEOs found. Line: " + line);
+                    }
+
+                    if (managerId == null) {
+                        hasCeo = true;
+                    }
+
+                    if (employees.containsKey(id)) {
+                        throw new DuplicateEmployeeException("Duplicate ID " + id + " for " + firstName + " " + lastName);
+                    }
+
                     Employee emp = new Employee(id, firstName, lastName, salary, managerId);
                     employees.put(id, emp);
-                } else {
-                	 System.out.printf("Record with Id: %d with Full Name: %s %s is ignored as data already exists%n",id, firstName, lastName);
+
+                } catch (InvalidDataException | DuplicateEmployeeException | MultipleCeoException e) {
+                    System.out.println(e.getMessage()); // Can also log this
+                    continue;
+                } catch (Exception e) {
+                    System.out.printf("Unexpected error parsing line: %s%n", line);
+                    continue;
                 }
             }
         }
-        
+
         linkEmployeesToManager(employees);
-        
         return employees;
-    	
     }
     
     // Link employees to managers
@@ -76,3 +80,4 @@ public class CsvParser {
         }
     }
 }
+

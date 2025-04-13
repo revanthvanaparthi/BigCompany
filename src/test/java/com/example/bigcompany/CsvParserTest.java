@@ -41,7 +41,7 @@ public class CsvParserTest {
       assertEquals(2, employees.size());
       assertEquals("Joe Doe", employees.get(123).getFullName());
       assertEquals(123, employees.get(124).getManagerId());
-      assertEquals(employees.get(124), employees.get(123).getSubordinates().getFirst());
+      assertEquals(employees.get(124), employees.get(123).getSubordinates().get(0));
       assertEquals(true, employees.get(124).getSubordinates().isEmpty());
     }
 
@@ -75,7 +75,7 @@ public class CsvParserTest {
     }
 
     @Test
-    public void testIncompleteDataSkipped() throws IOException {
+    public void testInValidDataSkipped() throws IOException {
         writeLines(List.of(
                 "id,firstName,lastName,salary,managerId",
                 "123,Joe,Doe,60000,", 		// valid

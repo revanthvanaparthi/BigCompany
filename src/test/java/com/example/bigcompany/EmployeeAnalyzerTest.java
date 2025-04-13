@@ -29,9 +29,9 @@ public class EmployeeAnalyzerTest {
     }
 
     @Test
-    void testManagerEarningLessThanAllowed() {
-        Map<Integer, Employee> employees = TestDataFactory.buildLessEarnAndLongReportEmployees();
-        analyzer.analyze(employees,4,20,50);
+    public void testManagerEarningLessThanAllowed() {
+    	Map<Integer, Employee> employees = EmployeeDataFactory.buildLessEarnEmployees();
+        analyzer.analyze(employees);
 
         String result = output.toString();
         assertTrue(result.contains("Manager Martin Chekov earns LESS than they should by 15000.00"));
@@ -40,8 +40,8 @@ public class EmployeeAnalyzerTest {
 
     @Test
     public void testManagerEarningMoreThanAllowed() {
-        Map<Integer, Employee> employees =  TestDataFactory.buildMoreEarnEmployees();
-        analyzer.analyze(employees, 4, 20, 50);
+        Map<Integer, Employee> employees =  EmployeeDataFactory.buildMoreEarnEmployees();
+        analyzer.analyze(employees);
 
         String result = output.toString();
         assertTrue(result.contains("Manager Joe Doe earns MORE than they should by"));
@@ -49,8 +49,8 @@ public class EmployeeAnalyzerTest {
 
     @Test
     public void testManagerEarningWithinBand() {
-        Map<Integer, Employee> employees =  TestDataFactory.buildEmployeesInBand();
-        analyzer.analyze(employees, 4, 20, 50);
+        Map<Integer, Employee> employees =  EmployeeDataFactory.buildEmployeesInBand();
+        analyzer.analyze(employees);
 
         // Expecting no output
         String result = output.toString();
@@ -58,28 +58,19 @@ public class EmployeeAnalyzerTest {
     }
 
     @Test
-    void testEmployeeWithTooLongReportingLine() {
-        Map<Integer, Employee> employees = TestDataFactory.buildLessEarnAndLongReportEmployees();
-        analyzer.analyze(employees,2,20,50);
+    public void testEmployeeWithTooLongReportingLine() {
+    	Map<Integer, Employee> employees =  EmployeeDataFactory.buildLongReportingEmployees();
+        analyzer.analyze(employees);
 
         String result = output.toString();
-        assertTrue(result.contains("Employee Brett Hardleaf has reporting line too long"), "No one should have too deep reporting");
+        assertTrue(result.contains("Employee Brett Hardleaf has reporting line too long"));
     }
     
 
     @Test
     public void testEmployeeWithinReportingLimit() {
-        Employee ceo = new Employee(1, "Alice", "CEO", 150000, null);
-        Employee m1 = new Employee(2, "Bob", "M1", 120000, 1);
-        Employee emp = new Employee(3, "Charlie", "Worker", 100000, 2);
-
-        Map<Integer, Employee> employees = Map.of(
-                1, ceo,
-                2, m1,
-                3, emp
-        );
-
-        analyzer.analyze(employees, 2, 20, 50);
+    	Map<Integer, Employee> employees =  EmployeeDataFactory.buildWithInReportingEmployees();
+        analyzer.analyze(employees);
 
         // Expecting no output
         String result = output.toString();
@@ -87,10 +78,10 @@ public class EmployeeAnalyzerTest {
     }
 
     @Test
-    public void testCEOIsIgnored() {
+    public void testCEOReportingIsIgnored() {
         Employee ceo = new Employee(1, "Alice", "CEO", 150000, null);
         Map<Integer, Employee> employees = Map.of(1, ceo);
-        analyzer.analyze(employees, 4, 20, 50);
+        analyzer.analyze(employees);
 
 
         // Expecting no output

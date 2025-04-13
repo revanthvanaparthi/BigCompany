@@ -27,13 +27,20 @@
 		<url/>
 	</scm>
 	<properties>
-		<maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+    	<maven.compiler.target>17</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		
+		<dependency>
+    		<groupId>org.projectlombok</groupId>
+    		<artifactId>lombok</artifactId>
+    		<!-- Use the latest version -->
+    		<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -46,13 +53,12 @@
 	<build>
 		<plugins>
 			<plugin>
-				
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-compiler-plugin</artifactId>
-      <version>3.11.0</version><!--$NO-MVN-MAN-VER$--> <!-- 3.13.0 is fine too -->
-      <configuration>
-        <release>21</release> <!-- switch from 24 -->
-      </configuration>
+      			<groupId>org.apache.maven.plugins</groupId>
+      			<artifactId>maven-compiler-plugin</artifactId>
+      			<version>3.11.0</version><!--$NO-MVN-MAN-VER$--> <!-- 3.13.0 is fine too -->
+      			<configuration>
+        			<release>17</release> <!-- switch from 24 -->
+      			</configuration>
 			</plugin>
 		</plugins>
 	</build>
