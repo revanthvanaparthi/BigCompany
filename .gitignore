@@ -10,8 +10,15 @@ target/
 .factorypath
 .project
 .settings
+.metadata
 .springBeans
 .sts4-cache
+
+### Ignore macOS system files ###
+.DS_Store
+
+### Ignore Maven target directories ###
+.target
 
 ### IntelliJ IDEA ###
 .idea
