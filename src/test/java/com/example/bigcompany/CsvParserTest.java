@@ -32,7 +32,7 @@ public class CsvParserTest {
     public void testValidCsvConversion() throws IOException {
         writeLines(List.of(
                 "id,firstName,lastName,salary,managerId",
-                "123,Joe,Doe,60000,",
+                "123,Joe,Doe,60000",
                 "124,Martin,Chekov,45000,123",
                 "124,Thor,Odin,45000,123"
         ));
@@ -80,7 +80,8 @@ public class CsvParserTest {
                 "id,firstName,lastName,salary,managerId",
                 "123,Joe,Doe,60000,", 		// valid
                 "124,Martin,Chekov", 		// Invalid few fields
-                "125,Thor,Odin,45000,123" 	// valid
+                "127,Steve,Rog,-100,123", 		// Invalid few fields
+                "125,Thor,Odin,45000.025,123" 	// valid
         ));
 
         Map<Integer, Employee> result = CsvParser.parseFile(tempFile.toString());

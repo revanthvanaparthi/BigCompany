@@ -18,7 +18,7 @@ target/
 .DS_Store
 
 ### Ignore Maven target directories ###
-.target
+target/
 
 ### IntelliJ IDEA ###
 .idea

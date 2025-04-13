@@ -8,12 +8,8 @@ import com.example.bigcompany.model.Employee;
 public class EmployeeAnalyzer {
 
     public void analyze(Map<Integer, Employee> employees) {
-    	try {
-        	getManagersOustSideBand(employees);
-            getCeoLongReporties(employees);
-    	} catch (Exception e) {
-			System.out.println("EmployeeAnalyzer class Throws Exception: " + e.getMessage());
-		}
+    	getManagersOustSideBand(employees);
+        getCeoLongReporties(employees);
     }
     
     // Prints all the managers earn more/less than they should, and by how much    

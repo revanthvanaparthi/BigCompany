@@ -15,3 +15,18 @@ Assuming
 3. Required Fields: Every record in the CSV must contain all required fields (id, manager_id, fullName and salary). Records with missing fields will be logged as errors and skipped.
 4. CEO Uniqueness: The company is assumed to have exactly one CEO (i.e., an employee with no manager). If multiple CEO entries are found (i.e., multiple employees with manager_id as null or empty), only the first will be considered valid. All other conflicting records will be treated as invalid and excluded from processing.
 5. Manager-Employee Relationship: It is assumed that every manager_id in the csv corresponds to a valid employee id
+
+
+CsvParser
+All data-related exceptions (like invalid input, missing fields, duplicates, or malformed CSV rows) are fully handled within the CsvParser class.
+
+EmployeeAnalyzer
+The EmployeeAnalyzer class focuses purely on business logic:
+1.It computes salary discrepancies and deep reporting chains.
+2.Since all input data is guaranteed to be clean (post-parsing), no exceptions are expected from this class.
+3.Hence, no explicit try-catch blocks are present here, keeping the logic simple and performant.
+
+BigcompanyApplication(Main Class)
+1.The main method wraps everything in a try-catch block as a final safety net.
+2.Any unexpected exceptions thrown by CsvParser, EmployeeAnalyzer, or other runtime issues will be caught here and logged.
+3.This prevents abrupt application termination and helps with centralized logging/debugging.
